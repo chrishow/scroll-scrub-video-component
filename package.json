@@ -1,7 +1,7 @@
 {
   "name": "scroll-scrub-video-component",
   "version": "1.0.0",
-  "description": "Starter web component project",
+  "description": "Scroll-to-scrub video web component",
   "main": "./dist/scroll-scrub-video-component.js",
   "module": "./dist/scroll-scrub-video-component.js",
   "type": "module",
