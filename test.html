@@ -9,8 +9,15 @@
           function changeSrc() {
             console.log('Changing video src attribute (test.html)');
 
+            const urlA = 'https://chrishow.github.io/scrub-videos-demo/videos/burlington-crf-25-g5.mp4';
+            const urlB = 'https://chrishow.github.io/scroll-scrub-demo-videos/plane-landing-720p-crf25-g5.mp4';
+
             const myVideo = document.getElementById('myVideo');
-            myVideo.setAttribute('src', 'https://chrishow.github.io/scrub-videos-demo/videos/burlington-crf-25-g5.mp4');
+            if(myVideo.getAttribute('src') === urlA) {
+              myVideo.setAttribute('src', urlB);
+            } else {
+              myVideo.setAttribute('src', urlA);
+            }
 
 
             return false;
