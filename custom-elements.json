@@ -13,47 +13,6 @@
           "members": [
             {
               "kind": "field",
-              "name": "observer",
-              "type": {
-                "text": "IntersectionObserver"
-              },
-              "static": true
-            },
-            {
-              "kind": "field",
-              "name": "activeVideoComponent",
-              "type": {
-                "text": "ScrollScrubVideoComponent | null"
-              },
-              "static": true
-            },
-            {
-              "kind": "field",
-              "name": "scrubVideos",
-              "type": {
-                "text": "Set<ScrollScrubVideoComponent>"
-              },
-              "static": true
-            },
-            {
-              "kind": "field",
-              "name": "observedElements",
-              "type": {
-                "text": "Set<ScrollScrubVideoComponent>"
-              },
-              "static": true
-            },
-            {
-              "kind": "field",
-              "name": "OVERSCRUB_AVOIDANCE_FACTOR",
-              "type": {
-                "text": "number"
-              },
-              "static": true,
-              "default": "0.99"
-            },
-            {
-              "kind": "field",
               "name": "minWidth",
               "type": {
                 "text": "number"
@@ -66,14 +25,6 @@
                 "text": "boolean"
               },
               "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "componentData",
-              "type": {
-                "text": "ComponentData"
-              },
-              "default": "{}"
             },
             {
               "kind": "field",
@@ -128,7 +79,7 @@
             },
             {
               "kind": "method",
-              "name": "updateScrubVideos",
+              "name": "updateallScrollScrubComponents",
               "static": true
             },
             {

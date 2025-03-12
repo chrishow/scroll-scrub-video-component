@@ -10,7 +10,7 @@ declare class ScrollScrubVideoComponent extends HTMLElement {
     disconnectedCallback(): void;
     static maybeDoStaticInitialisation(): void;
     static intersectionObserverCallback(entries: IntersectionObserverEntry[], _: IntersectionObserver): void;
-    static updateScrubVideos(): void;
+    static updateallScrollScrubComponents(): void;
     static handleScrollEvent(): void;
     preloadVideo(): Promise<void>;
     render(): void;
