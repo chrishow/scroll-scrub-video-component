@@ -16,6 +16,18 @@ Download the file <a download href='./dist/scroll-scrub-video-component.bundle.j
 ```html
 <script src="scroll-scrub-video-component.bundle.js"></script>
 ```
+<br>
+  
+_Expert mode:_
+Alternatively, if you will be bundling the component into a javascript application, install using npm:
+```sh
+npm install @chrishow/scroll-scrub-video-component
+```
+And import the component into your app:
+```js
+import 'scroll-scrub-video-component';
+```
+
 
 ### 2. Add components to HTML
 Add HTML elements for each component, like this:
