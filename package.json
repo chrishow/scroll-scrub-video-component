@@ -1,5 +1,5 @@
 {
-  "name": "scroll-scrub-video-component",
+  "name": "@chrishow/scroll-scrub-video-component",
   "version": "1.0.0",
   "description": "Scroll-to-scrub video web component",
   "main": "./dist/scroll-scrub-video-component.js",
