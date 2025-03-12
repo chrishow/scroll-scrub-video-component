@@ -13,13 +13,6 @@
           "members": [
             {
               "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "field",
               "name": "isHidden",
               "type": {
                 "text": "boolean"
@@ -50,8 +43,28 @@
               "default": "null"
             },
             {
+              "kind": "field",
+              "name": "isInited",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "videoContainer",
+              "type": {
+                "text": "VideoContainer | null"
+              },
+              "default": "null"
+            },
+            {
               "kind": "method",
               "name": "loadAndObserve"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth"
             },
             {
               "kind": "method",
@@ -79,7 +92,7 @@
             },
             {
               "kind": "method",
-              "name": "updateallScrollScrubComponents",
+              "name": "updateAllScrollScrubComponents",
               "static": true
             },
             {
@@ -99,6 +112,17 @@
             {
               "kind": "method",
               "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "src"
+            },
+            {
+              "name": "firefox-src"
+            },
+            {
+              "name": "min-width"
             }
           ],
           "superclass": {
