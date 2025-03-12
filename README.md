@@ -133,7 +133,7 @@ firefox-output.mp4
 ```
 
 
-## :rocket: Development scripts
+## 🚀 Development scripts
 
 ```npm install```
 
@@ -152,7 +152,7 @@ Used to automatically rebuild the component as soon as any changes are made to t
 Serves the component locally (from _index.html_).
 
 
-## :construction_worker: Other commands
+## 👷‍♀️ Other commands
 
 ```npm run build:bundle```
 
