@@ -1,4 +1,4 @@
-## Scroll-to-Scrub videos Web Component
+## Scroll-to-Scrub video Web Component
 
 A web component which displays videos which scrub as you scroll the page. 
 
@@ -11,7 +11,7 @@ A web component which displays videos which scrub as you scroll the page.
 
 #### 1. Include the Web Component javascript.
 
-Download the file <a href='./dist/scroll-scrub-video-component.bundle.js'>`scroll-scrub-video-component.bundle.js`</a> and include it in the document head:
+Download the file <a download href='./dist/scroll-scrub-video-component.bundle.js'>`scroll-scrub-video-component.bundle.js`</a> and include it in the document head:
 
 ```html
 <script src="scroll-scrub-video-component.bundle.js"></script>
@@ -21,13 +21,13 @@ Download the file <a href='./dist/scroll-scrub-video-component.bundle.js'>`scrol
 Add HTML elements for each component, like this:
 
 ```html
-<scrub-video src="./videos/my-video.mp4"></scrub-video>
+<scroll-scrub-video src="./videos/my-video.mp4"></scroll-scrub-video>
 ```
 The attribute `src` is required. This is your video source. 
 
 You may optionally add two more attributes:
 ```html
-<scrub-video src="./videos/my-video.mp4" firefox-src="./videos/my-special-firefox-video.mp4" min-width="650"></scrub-video>
+<scroll-scrub-video src="./videos/my-video.mp4" firefox-src="./videos/my-special-firefox-video.mp4" min-width="650"></scroll-scrub-video>
 ```
 `firefox-src` is the url to a specific video to be used on Firefox browsers. This is useful because videos with a 
 keyframe interval of 5 are fine on Chrome, Edge and Safari, but are very janky on Firefox. So you can specify a specific
@@ -87,7 +87,7 @@ How quickly the video zooms as it goes full screen
 ```
 
 
-## Encoding videos
+## 📼 Encoding videos
 You can use [ffmpeg](https://www.ffmpeg.org/) to encode videos suitably for the web component. 
 
 If you don't have ffmpeg installed, you can use this in-browser version which doesn't require you to install 

@@ -13,16 +13,141 @@
           "members": [
             {
               "kind": "field",
-              "name": "greeting",
+              "name": "observer",
               "type": {
-                "text": "string"
+                "text": "IntersectionObserver"
               },
-              "default": "\"Hi\""
-            }
-          ],
-          "attributes": [
+              "static": true
+            },
             {
-              "name": "greeting"
+              "kind": "field",
+              "name": "activeVideoComponent",
+              "type": {
+                "text": "ScrollScrubVideoComponent | null"
+              },
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "scrubVideos",
+              "type": {
+                "text": "Set<ScrollScrubVideoComponent>"
+              },
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "observedElements",
+              "type": {
+                "text": "Set<ScrollScrubVideoComponent>"
+              },
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "OVERSCRUB_AVOIDANCE_FACTOR",
+              "type": {
+                "text": "number"
+              },
+              "static": true,
+              "default": "0.99"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "isHidden",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "componentData",
+              "type": {
+                "text": "ComponentData"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "zoomDuration",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "video",
+              "type": {
+                "text": "HTMLVideoElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "loadAndObserve"
+            },
+            {
+              "kind": "method",
+              "name": "maybeDoStaticInitialisation",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "intersectionObserverCallback",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "entries",
+                  "type": {
+                    "text": "IntersectionObserverEntry[]"
+                  }
+                },
+                {
+                  "name": "_",
+                  "type": {
+                    "text": "IntersectionObserver"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateScrubVideos",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "handleScrollEvent",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "preloadVideo",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
             }
           ],
           "superclass": {
@@ -33,14 +158,6 @@
         }
       ],
       "exports": [
-        {
-          "kind": "js",
-          "name": "ScrollScrubVideoComponent",
-          "declaration": {
-            "name": "ScrollScrubVideoComponent",
-            "module": "src/scroll-scrub-video-component.ts"
-          }
-        },
         {
           "kind": "custom-element-definition",
           "name": "scroll-scrub-video",
@@ -58,7 +175,7 @@
         {
           "kind": "variable",
           "name": "styles",
-          "default": "`\n  <style>\n    :host {\n      /* this property prevents outside styles from affecting this component */\n      all: initial;\n    }\n\n    .text {\n      font-size: 20px;\n      font-family: sans-serif;\n    }\n  </style>\n`"
+          "default": "`\n  <style>\n      :host {\n          display: block;\n      }\n\n      :host(.video-loaded) {\n          height: calc(100vh * var(--scrub-pages, 6));\n      }\n\n      :host(.video-loaded) video {\n          opacity: 1;\n      }\n      \n      .scrub-video-container {\n          position: sticky;\n          top: 0px;\n          height: 100vh;\n          margin-left: var(--unzoomed-margin-left, 5rem);\n          margin-right: var(--unzoomed-margin-right, 5rem);                \n      }\n      \n      .scrub-video-container.animating {\n          transition: all var(--zoom-duration, 0.2s);\n      }\n\n      .scrub-video-container.animating video {\n          transition: all var(--zoom-duration, 0.2s), opacity var(--load-fade-duration, 0.2s);\n      }\n\n      .scrub-video-container.in-view {\n          margin: 0;\n      }\n\n      .scrub-video-container.in-view video {\n          top: 0;\n          height: 100%;\n      }\n\n      video {\n          position: absolute;\n          top: var(--unzoomed-margin-top, 3rem);\n          left: 0;\n          width: 100%;\n          height: calc(100% - var(--unzoomed-margin-top, 3rem) - var(--unzoomed-margin-bottom, 3rem));\n          object-fit: cover;\n          opacity: 0;\n          transition: opacity var(--load-fade-duration, 0.2s);\n      }\n  </style>\n`"
         }
       ],
       "exports": [

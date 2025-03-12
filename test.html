@@ -1,11 +1,181 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Web Component Starter Lit</title>
-    <script type="module" src="dist/scroll-scrub-video-component.js"></script>
-  </head>
-  <body>
-    <scroll-scrub-video greeting="Hello, world!"></scroll-scrub-video>
-  </body>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="module" src="dist/scroll-scrub-video-component.js"></script>
+
+        <style> 
+            /*
+             * scrub-video web component styles 
+             */
+             scroll-scrub-video {
+                /* Setting these help to avoid layout shifts */
+                display: block;
+                min-height: 100vh;
+
+                /* 
+                 * Settings from here the defaults, you don't actually need to 
+                 * set these unless you want to change the defaults
+                 */
+
+                /* Margins when the video is not zoomed 
+                 * You probably want these to match your site content's margins
+                 */
+                --unzoomed-margin-left: 5rem;
+                --unzoomed-margin-right: 5rem;
+                --unzoomed-margin-top: 3rem;
+                --unzoomed-margin-bottom: 3rem;
+
+                /* How many 'pages' you have to scroll through to
+                 * scrub through one video 
+                 */
+                --scrub-pages: 6;
+
+                /* How quickly the video fades in once loaded */
+                --load-fade-duration: 0.5s;
+
+                /* How quickly the video zooms as it goes full screen */
+                --zoom-duration: 0.2s;
+            }
+
+
+            /* The rest of these styles are just for this demo */
+            :root {
+                --side-margin: 5rem;
+            }
+
+            .small-screens {
+                display: none;
+            }
+
+            @media screen and (max-width: 650px) {
+                :root {
+                    --side-margin: 2rem;
+                }
+
+                .small-screens {
+                    display: block;
+                    padding: 1rem;
+                    background-color: aliceblue;
+                    margin: 2rem;
+                }
+            }
+
+
+            body {
+                font-family: Inter, "system-ui", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            h2,
+            p {
+                margin-left: var(--side-margin);
+                margin-right: var(--side-margin);
+            }
+
+            h2 {
+                margin-block: 1em 0;
+            }
+
+        </style>
+        
+    </head>
+    <body>          
+          <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          
+          <p>
+            Proin facilisis velit arcu, nec dictum mauris sagittis fringilla. Suspendisse potenti.
+          </p>
+          
+          <p>
+            Aenean non nibh dictum, finibus urna accumsan, vulputate mauris.
+          </p>
+          
+          <p>
+            Fusce vehicula augue nec leo placerat vestibulum.
+          </p>
+          
+          <p>
+            Nam in quam arcu. Nam nunc mauris, tincidunt ac gravida quis, pellentesque luctus nunc. Nunc interdum sem sed sapien aliquam tempus.
+          </p>
+          
+          <p>
+            Phasellus sit amet venenatis quam. Sed condimentum laoreet mauris. 
+          </p>
+          
+          <p>
+            Proin facilisis velit arcu, nec dictum mauris sagittis fringilla. Suspendisse potenti.
+          </p>
+          
+          <p>
+            Aenean non nibh dictum, finibus urna accumsan, vulputate mauris.
+          </p>
+          
+          <p>
+            Fusce vehicula augue nec leo placerat vestibulum.
+          </p>
+          
+          <p>
+            Nam in quam arcu. Nam nunc mauris, tincidunt ac gravida quis, pellentesque luctus nunc. Nunc interdum sem sed sapien aliquam tempus.
+          </p>
+          
+          <p>
+            Phasellus sit amet venenatis quam. Sed condimentum laoreet mauris. 
+          </p>
+
+          <p>
+            Aenean non nibh dictum, finibus urna accumsan, vulputate mauris.
+          </p>
+          
+          <p>
+            Fusce vehicula augue nec leo placerat vestibulum.
+          </p>
+          
+          <p>
+            Nam in quam arcu. Nam nunc mauris, tincidunt ac gravida quis, pellentesque luctus nunc. Nunc interdum sem sed sapien aliquam tempus.
+          </p>
+          
+          
+
+          <h2>Test</h2>
+          <scroll-scrub-video 
+          src="https://chrishow.github.io/scroll-scrub-demo-videos/plane-landing-720p-crf25-g5.mp4" 
+          firefox-src="https://chrishow.github.io/scroll-scrub-demo-videos/plane-landing-720p-crf25-g1.mp4" 
+          min-width="650"
+          ></scroll-scrub-video>
+          
+          <div class="small-screens">
+            Do something else for narrow screens / phones...
+          </div>
+
+          <p>
+            Phasellus sit amet venenatis quam. Sed condimentum laoreet mauris. 
+          </p>
+          <p>
+            Aenean non nibh dictum, finibus urna accumsan, vulputate mauris.
+          </p>
+          
+          <p>
+            Fusce vehicula augue nec leo placerat vestibulum.
+          </p>
+
+          
+          <p>
+            Aenean non nibh dictum, finibus urna accumsan, vulputate mauris.
+          </p>
+          
+          <p>
+            Fusce vehicula augue nec leo placerat vestibulum.
+          </p>
+          
+          <p>
+            Nam in quam arcu. Nam nunc mauris, tincidunt ac gravida quis, pellentesque luctus nunc. Nunc interdum sem sed sapien aliquam tempus.
+          </p>
+
+    </body>
 </html>
