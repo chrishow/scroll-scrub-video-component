@@ -2,7 +2,7 @@
 
 A web component which displays videos which scrub as you scroll the page. 
 
-[Demo here](demo.html)
+[Demo here](https://chrishow.github.io/scroll-scrub-video-component/demo.html)
 
 ## :rocket: Development scripts
 
