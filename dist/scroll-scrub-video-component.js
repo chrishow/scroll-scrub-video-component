@@ -43,7 +43,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
                 ScrollScrubVideoComponent.updateAllScrollScrubComponents();
             }
             else {
-                console.warn("scrub-video-container not found in shadow DOM");
+                // console.warn("scrub-video-container not found in shadow DOM");
             }
         });
     }
@@ -59,7 +59,9 @@ class ScrollScrubVideoComponent extends HTMLElement {
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (this.isInited && oldValue !== newValue) {
-            console.log(`Attribute ${name} has changed from ${oldValue} to ${newValue}.`);
+            // console.log(
+            //   `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
+            // );
             // Fade out the video
             this.classList.remove('video-loaded');
             observer.unobserve(this.videoContainer);
@@ -87,7 +89,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
             const videoContainer = entry.target;
             const videoComponent = videoContainer.ScrollScrubVideoComponent;
             if (!videoComponent) {
-                console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
+                // console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
                 return;
             }
             // Add class 'animating' to element if it is within the viewport
