@@ -151,6 +151,8 @@ firefox-output.mp4
 
 ## 🚀 Development scripts
 
+You'll only need this stuff if you plan to modify the web component, nothing down here is needed just to use it. 
+
 ```npm install```
 
 Installs node dependencies.
@@ -165,7 +167,7 @@ Used to automatically rebuild the component as soon as any changes are made to t
 
 ```npm run serve```
 
-Serves the component locally (from _index.html_).
+Serves the component locally.
 
 
 ## 👷‍♀️ Other commands
