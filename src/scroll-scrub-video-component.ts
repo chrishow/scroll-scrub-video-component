@@ -72,7 +72,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
         // Update the positions of all scrub-videos
         ScrollScrubVideoComponent.updateAllScrollScrubComponents();
       } else {
-        console.warn("scrub-video-container not found in shadow DOM");
+        // console.warn("scrub-video-container not found in shadow DOM");
       }
     });
   }
@@ -92,9 +92,9 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (this.isInited && oldValue !== newValue) {
-      console.log(
-        `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
-      );
+      // console.log(
+      //   `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
+      // );
 
       // Fade out the video
       this.classList.remove('video-loaded');
@@ -133,7 +133,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
       const videoComponent = videoContainer.ScrollScrubVideoComponent;
 
       if (!videoComponent) {
-        console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
+        // console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
         return;
       }
 
