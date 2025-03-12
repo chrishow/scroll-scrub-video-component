@@ -5,7 +5,7 @@ A web component which displays videos which scrub as you scroll the page.
 
 ### Demo:
 
-[Demo here](https://chrishow.github.io/scroll-scrub-video-component/demo.html)
+[Demo here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/chrishow/scroll-scrub-video-component/main/demo.html)
 
 ### Usage:
 
@@ -156,7 +156,8 @@ Serves the component locally (from _index.html_).
 
 ```npm run build:bundle```
 
-Bundles the component into a single file (to _dist/scroll-scrub-video-component.bundle.js_). This is great for serving the component via a CDN, such as [UPKG](https://unpkg.com/) ([example](https://codesandbox.io/s/scroll-scrub-video-cdn-3ouokv?file=/index.html)).
+Bundles the component into a single file (to _dist/scroll-scrub-video-component.bundle.js_).
+
 
 ```npm run analyze```
 
