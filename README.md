@@ -2,7 +2,7 @@
 
 A web component which displays videos which scrub as you scroll the page. 
 
-Demo here [todo add demo]
+[Demo here](demo.html)
 
 ## :rocket: Development scripts
 
