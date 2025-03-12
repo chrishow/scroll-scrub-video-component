@@ -16,6 +16,7 @@ interface ComponentData {
 // Static class members
 const componentDataMap = new WeakMap<ScrollScrubVideoComponent, ComponentData>();
 let observer: IntersectionObserver;
+let staticInitialisationDone = false;
 
 // The active component, if there is one
 let activeScrollScrubComponent: ScrollScrubVideoComponent | null;
@@ -71,15 +72,15 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
         // Update the positions of all scrub-videos
         ScrollScrubVideoComponent.updateAllScrollScrubComponents();
-      } else {
-        // console.warn("scrub-video-container not found in shadow DOM");
       }
     });
   }
 
   disconnectedCallback() {
     // Unobserve the video container
-    observer.unobserve(this.videoContainer!);
+    if (this.videoContainer) {
+      observer.unobserve(this.videoContainer);
+    }
     // Remove this component from the set of observed elements
     observedElements.delete(this);
 
@@ -90,12 +91,8 @@ class ScrollScrubVideoComponent extends HTMLElement {
     ScrollScrubVideoComponent.updateAllScrollScrubComponents();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+  attributeChangedCallback(_: string, oldValue: string | null, newValue: string | null) {
     if (this.isInited && oldValue !== newValue) {
-      // console.log(
-      //   `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
-      // );
-
       // Fade out the video
       this.classList.remove('video-loaded');
 
@@ -118,10 +115,12 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
 
   static maybeDoStaticInitialisation() {
-    if (!observer) {
+    if (!staticInitialisationDone) {
       observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
       document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
       window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
+
+      staticInitialisationDone = true;
     }
   }
 
@@ -132,19 +131,14 @@ class ScrollScrubVideoComponent extends HTMLElement {
       const videoContainer = entry.target as VideoContainer;
       const videoComponent = videoContainer.ScrollScrubVideoComponent;
 
-      if (!videoComponent) {
-        // console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
-        return;
-      }
-
       // Add class 'animating' to element if it is within the viewport
-      entry.target.classList.add('animating');
-      entry.target.classList.toggle('in-view', isWithinViewport);
+      videoContainer.classList.add('animating');
+      videoContainer.classList.toggle('in-view', isWithinViewport);
 
       // Remove the animation class after we're done zooming in or out
       const delay = videoComponent.zoomDuration * 1000;
       setTimeout(() => {
-        entry.target.classList.remove('animating');
+        videoContainer.classList.remove('animating');
       }, delay);
 
       if (isWithinViewport) {
@@ -199,7 +193,9 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
         // console.log(`${wrapperTopPosition} > ${window.scrollY} (${progress}) [${seekTime}] duration: ${video.duration} > ${wrapperBottomPosition}`);
         if (isFinite(seekTime) && !isNaN(video.duration)) {
-          video.currentTime = seekTime;
+          requestAnimationFrame(() => {
+            video.currentTime = seekTime;
+          });
         }
       }
     }
@@ -207,16 +203,23 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
   preloadVideo(): Promise<void> {
     if (this.src) {
+      let blobURL: string | null = null;
       return fetch(this.src)
         .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
           return response.blob()
         })
         .then((response) => {
-          let blobURL = URL.createObjectURL(response);
+          blobURL = URL.createObjectURL(response);
           if (this.video) {
             this.video.setAttribute("src", blobURL);
           }
           this.classList.add('video-loaded');
+        })
+        .catch(e => {
+          console.error("Error preloading video:", e);
         });
     }
     return Promise.resolve();
@@ -236,13 +239,17 @@ class ScrollScrubVideoComponent extends HTMLElement {
     }
 
 
+    if (!this.shadowRoot) {
+      return;
+    }
+
     this.shadowRoot!.innerHTML = `
       ${styles}
       <div class='scrub-video-container'>
           <video src='${this.src}' muted  playsinline></video>
       </div>`;
 
-    this.videoContainer = this.shadowRoot!.querySelector('.scrub-video-container') as VideoContainer;
+    this.videoContainer = this.shadowRoot.querySelector('.scrub-video-container') as VideoContainer;
 
     if (this.minWidth) {
       if (window.innerWidth >= this.minWidth) {

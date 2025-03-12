@@ -12,7 +12,7 @@ declare class ScrollScrubVideoComponent extends HTMLElement {
     connectedCallback(): void;
     loadAndObserve(): void;
     disconnectedCallback(): void;
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
+    attributeChangedCallback(_: string, oldValue: string | null, newValue: string | null): void;
     get minWidth(): number;
     static get observedAttributes(): string[];
     static maybeDoStaticInitialisation(): void;

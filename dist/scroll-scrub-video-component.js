@@ -3,6 +3,7 @@ import { styles } from './styles';
 // Static class members
 const componentDataMap = new WeakMap();
 let observer;
+let staticInitialisationDone = false;
 // The active component, if there is one
 let activeScrollScrubComponent;
 const allScrollScrubComponents = new Set();
@@ -42,14 +43,13 @@ class ScrollScrubVideoComponent extends HTMLElement {
                 // Update the positions of all scrub-videos
                 ScrollScrubVideoComponent.updateAllScrollScrubComponents();
             }
-            else {
-                // console.warn("scrub-video-container not found in shadow DOM");
-            }
         });
     }
     disconnectedCallback() {
         // Unobserve the video container
-        observer.unobserve(this.videoContainer);
+        if (this.videoContainer) {
+            observer.unobserve(this.videoContainer);
+        }
         // Remove this component from the set of observed elements
         observedElements.delete(this);
         // Remove from the set of all scrub video components
@@ -57,11 +57,8 @@ class ScrollScrubVideoComponent extends HTMLElement {
         // Update the positions of all scrub-videos
         ScrollScrubVideoComponent.updateAllScrollScrubComponents();
     }
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(_, oldValue, newValue) {
         if (this.isInited && oldValue !== newValue) {
-            // console.log(
-            //   `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
-            // );
             // Fade out the video
             this.classList.remove('video-loaded');
             observer.unobserve(this.videoContainer);
@@ -77,10 +74,11 @@ class ScrollScrubVideoComponent extends HTMLElement {
         return ["src", "firefox-src", "min-width"];
     }
     static maybeDoStaticInitialisation() {
-        if (!observer) {
+        if (!staticInitialisationDone) {
             observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
             document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
             window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
+            staticInitialisationDone = true;
         }
     }
     static intersectionObserverCallback(entries, _) {
@@ -88,17 +86,13 @@ class ScrollScrubVideoComponent extends HTMLElement {
             const isWithinViewport = entry.intersectionRatio === 1;
             const videoContainer = entry.target;
             const videoComponent = videoContainer.ScrollScrubVideoComponent;
-            if (!videoComponent) {
-                // console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
-                return;
-            }
             // Add class 'animating' to element if it is within the viewport
-            entry.target.classList.add('animating');
-            entry.target.classList.toggle('in-view', isWithinViewport);
+            videoContainer.classList.add('animating');
+            videoContainer.classList.toggle('in-view', isWithinViewport);
             // Remove the animation class after we're done zooming in or out
             const delay = videoComponent.zoomDuration * 1000;
             setTimeout(() => {
-                entry.target.classList.remove('animating');
+                videoContainer.classList.remove('animating');
             }, delay);
             if (isWithinViewport) {
                 activeScrollScrubComponent = videoComponent;
@@ -145,7 +139,9 @@ class ScrollScrubVideoComponent extends HTMLElement {
                 const seekTime = (progress * video.duration);
                 // console.log(`${wrapperTopPosition} > ${window.scrollY} (${progress}) [${seekTime}] duration: ${video.duration} > ${wrapperBottomPosition}`);
                 if (isFinite(seekTime) && !isNaN(video.duration)) {
-                    video.currentTime = seekTime;
+                    requestAnimationFrame(() => {
+                        video.currentTime = seekTime;
+                    });
                 }
             }
         }
@@ -153,16 +149,23 @@ class ScrollScrubVideoComponent extends HTMLElement {
     ;
     preloadVideo() {
         if (this.src) {
+            let blobURL = null;
             return fetch(this.src)
                 .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 return response.blob();
             })
                 .then((response) => {
-                let blobURL = URL.createObjectURL(response);
+                blobURL = URL.createObjectURL(response);
                 if (this.video) {
                     this.video.setAttribute("src", blobURL);
                 }
                 this.classList.add('video-loaded');
+            })
+                .catch(e => {
+                console.error("Error preloading video:", e);
             });
         }
         return Promise.resolve();
@@ -177,6 +180,9 @@ class ScrollScrubVideoComponent extends HTMLElement {
             if (isFirefox) {
                 this.src = firefoxSrc;
             }
+        }
+        if (!this.shadowRoot) {
+            return;
         }
         this.shadowRoot.innerHTML = `
       ${styles}
