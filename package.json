@@ -1,0 +1,53 @@
+{
+  "name": "scroll-scrub-video-component",
+  "version": "1.0.0",
+  "description": "Starter web component project",
+  "main": "./dist/scroll-scrub-video-component.js",
+  "module": "./dist/scroll-scrub-video-component.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && npm run analyze",
+    "build:watch": "tsc --watch",
+    "serve": "wds --watch",
+    "build:bundle": "npm run clean && npm run build && rollup --config",
+    "clean": "rimraf dist test",
+    "analyze": "cem analyze --globs \"src/**/*.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrishow/scroll-scrub-video-component.git"
+  },
+  "author": "Chris How",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrishow/scroll-scrub-video-component/issues"
+  },
+  "homepage": "https://github.com/chrishow/scroll-scrub-video-component#readme",
+  "keywords": [
+    "video",
+    "scroll",
+    "web-component",
+    "custom-element",
+    "component",
+    "element"
+  ],
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.6.8",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@web/dev-server": "^0.1.35",
+    "@web/dev-server-legacy": "^1.0.1",
+    "rimraf": "^4.1.2",
+    "rollup": "^2.79.1",
+    "rollup-plugin-summary": "^1.4.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-transform-tagged-template": "^0.0.3",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  },
+  "customElements": "custom-elements.json",
+  "files": [
+    "dist/**/*",
+    "custom-elements.json"
+  ]
+}
