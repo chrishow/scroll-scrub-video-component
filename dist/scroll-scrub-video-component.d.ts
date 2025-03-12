@@ -1,16 +1,23 @@
+interface VideoContainer extends HTMLElement {
+    ScrollScrubVideoComponent: ScrollScrubVideoComponent;
+}
 declare class ScrollScrubVideoComponent extends HTMLElement {
-    minWidth: number;
     isHidden: boolean;
     zoomDuration: number;
     video: HTMLVideoElement | null;
     src: string | null;
+    isInited: boolean;
+    videoContainer: VideoContainer | null;
     constructor();
     connectedCallback(): void;
     loadAndObserve(): void;
     disconnectedCallback(): void;
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
+    get minWidth(): number;
+    static get observedAttributes(): string[];
     static maybeDoStaticInitialisation(): void;
     static intersectionObserverCallback(entries: IntersectionObserverEntry[], _: IntersectionObserver): void;
-    static updateallScrollScrubComponents(): void;
+    static updateAllScrollScrubComponents(): void;
     static handleScrollEvent(): void;
     preloadVideo(): Promise<void>;
     render(): void;

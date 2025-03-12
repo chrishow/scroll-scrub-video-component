@@ -25,44 +25,36 @@ const OVERSCRUB_AVOIDANCE_FACTOR = 0.99;
 
 
 class ScrollScrubVideoComponent extends HTMLElement {
-  minWidth: number;
   isHidden: boolean;
   zoomDuration: number;
   video: HTMLVideoElement | null;
   src: string | null;
+  isInited: boolean;
+  videoContainer: VideoContainer | null;
 
   constructor() {
     super();
     ScrollScrubVideoComponent.maybeDoStaticInitialisation();
 
     // Initialise instance members
-    this.minWidth = parseInt(this.getAttribute('min-width') ?? '0', 10);
     this.isHidden = false;
     this.zoomDuration = parseFloat(getComputedStyle(this).getPropertyValue('--zoom-duration') || '0.2s');
 
     this.video = null;
     this.src = null;
+    this.isInited = false;
+    this.videoContainer = null;
   }
 
   connectedCallback() {
     this.attachShadow({ mode: "open" });
 
-    if (this.minWidth) {
-      if (window.innerWidth >= this.minWidth) {
-        this.loadAndObserve();
-      } else {
-        this.style.display = 'none';
-        this.isHidden = true;
-      }
-    } else {
-      this.loadAndObserve();
-    }
+    this.render();
     allScrollScrubComponents.add(this);
+    this.isInited = true;
   }
 
   loadAndObserve() {
-    this.render();
-
     // Get the video element
     this.video = this.shadowRoot!.querySelector("video");
     if (!this.video) {
@@ -72,15 +64,13 @@ class ScrollScrubVideoComponent extends HTMLElement {
     // Preload the video
     this.preloadVideo().then(() => {
       // Setup this scrub-video
-      const videoContainer = this.shadowRoot!.querySelector('.scrub-video-container') as VideoContainer;
-
-      if (videoContainer) {
-        videoContainer.ScrollScrubVideoComponent = this;
-        observer.observe(videoContainer);
+      if (this.videoContainer) {
+        this.videoContainer.ScrollScrubVideoComponent = this;
+        observer.observe(this.videoContainer);
         observedElements.add(this);
 
         // Update the positions of all scrub-videos
-        ScrollScrubVideoComponent.updateallScrollScrubComponents();
+        ScrollScrubVideoComponent.updateAllScrollScrubComponents();
       } else {
         console.warn("scrub-video-container not found in shadow DOM");
       }
@@ -88,16 +78,50 @@ class ScrollScrubVideoComponent extends HTMLElement {
   }
 
   disconnectedCallback() {
-    // If you were going to remove elements, you should update the
-    // ScrollScrubVideoComponent.allScrollScrubComponents set
-    // We're not going to do that here, that's left as an exercise
+    // Unobserve the video container
+    observer.unobserve(this.videoContainer!);
+    // Remove this component from the set of observed elements
+    observedElements.delete(this);
+
+    // Remove from the set of all scrub video components
+    allScrollScrubComponents.delete(this);
+
+    // Update the positions of all scrub-videos
+    ScrollScrubVideoComponent.updateAllScrollScrubComponents();
   }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (this.isInited && oldValue !== newValue) {
+      console.log(
+        `Attribute ${name} has changed from ${oldValue} to ${newValue}.`,
+      );
+
+      // Fade out the video
+      this.classList.remove('video-loaded');
+
+      observer.unobserve(this.videoContainer!);
+
+      this.render();
+      ScrollScrubVideoComponent.updateAllScrollScrubComponents();
+    }
+  }
+
+
+  get minWidth() {
+    return parseInt(this.getAttribute('min-width') ?? '0', 10)
+  }
+
+
+  static get observedAttributes() {
+    return ["src", "firefox-src", "min-width"];
+  }
+
 
   static maybeDoStaticInitialisation() {
     if (!observer) {
       observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
       document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
-      window.addEventListener("resize", ScrollScrubVideoComponent.updateallScrollScrubComponents);
+      window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
     }
   }
 
@@ -130,7 +154,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
     });
   }
 
-  static updateallScrollScrubComponents() {
+  static updateAllScrollScrubComponents() {
     // Get new positions of scrub video components
     allScrollScrubComponents.forEach((videoComponent) => {
       const clientRect = videoComponent.getBoundingClientRect();
@@ -217,6 +241,20 @@ class ScrollScrubVideoComponent extends HTMLElement {
       <div class='scrub-video-container'>
           <video src='${this.src}' muted  playsinline></video>
       </div>`;
+
+    this.videoContainer = this.shadowRoot!.querySelector('.scrub-video-container') as VideoContainer;
+
+    if (this.minWidth) {
+      if (window.innerWidth >= this.minWidth) {
+        this.loadAndObserve();
+      } else {
+        this.style.display = 'none';
+        this.isHidden = true;
+      }
+    } else {
+      this.loadAndObserve();
+    }
+
   }
 
 }
