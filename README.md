@@ -16,6 +16,10 @@ Download the file <a download href='./dist/scroll-scrub-video-component.bundle.j
 ```html
 <script src="scroll-scrub-video-component.bundle.js"></script>
 ```
+Or you can use it straight from [unpkg](https://unpkg.com/):
+```html
+<script src="https://unpkg.com/@chrishow/scroll-scrub-video-component@latest/dist/scroll-scrub-video-component.bundle.js"></script>
+```
 <br>
   
 _Expert mode:_
