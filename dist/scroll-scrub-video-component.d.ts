@@ -1,17 +1,6 @@
-interface ComponentData {
-    lower: number;
-    upper: number;
-    video: HTMLVideoElement | null;
-}
 declare class ScrollScrubVideoComponent extends HTMLElement {
-    static observer: IntersectionObserver;
-    static activeVideoComponent: ScrollScrubVideoComponent | null;
-    static scrubVideos: Set<ScrollScrubVideoComponent>;
-    static observedElements: Set<ScrollScrubVideoComponent>;
-    static OVERSCRUB_AVOIDANCE_FACTOR: number;
     minWidth: number;
     isHidden: boolean;
-    componentData: ComponentData;
     zoomDuration: number;
     video: HTMLVideoElement | null;
     src: string | null;

@@ -12,21 +12,21 @@ interface ComponentData {
   video: HTMLVideoElement | null;
 }
 
-class ScrollScrubVideoComponent extends HTMLElement {
-  static observer: IntersectionObserver;
-  static activeVideoComponent: ScrollScrubVideoComponent | null;
-  static scrubVideos: Set<ScrollScrubVideoComponent>;
-  static observedElements: Set<ScrollScrubVideoComponent>;
-  static OVERSCRUB_AVOIDANCE_FACTOR = 0.99;
+// Static class members
+const componentDataMap = new WeakMap<ScrollScrubVideoComponent, ComponentData>();
+let observer: IntersectionObserver;
+let activeVideoComponent: ScrollScrubVideoComponent | null;
+const scrubVideos: Set<ScrollScrubVideoComponent> = new Set();
+const observedElements: Set<ScrollScrubVideoComponent> = new Set();
+const OVERSCRUB_AVOIDANCE_FACTOR = 0.99;
 
-  /* Instance members */
+
+class ScrollScrubVideoComponent extends HTMLElement {
   minWidth: number;
   isHidden: boolean;
-  componentData: ComponentData;
   zoomDuration: number;
   video: HTMLVideoElement | null;
   src: string | null;
-
 
   constructor() {
     super();
@@ -37,7 +37,6 @@ class ScrollScrubVideoComponent extends HTMLElement {
     this.isHidden = false;
     this.zoomDuration = parseFloat(getComputedStyle(this).getPropertyValue('--zoom-duration') || '0.2s');
 
-    this.componentData = {} as ComponentData;
     this.video = null;
     this.src = null;
   }
@@ -55,7 +54,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
     } else {
       this.loadAndObserve();
     }
-    ScrollScrubVideoComponent.scrubVideos.add(this);
+    scrubVideos.add(this);
   }
 
   loadAndObserve() {
@@ -74,9 +73,8 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
       if (videoContainer) {
         videoContainer.ScrollScrubVideoComponent = this;
-
-        ScrollScrubVideoComponent.observer.observe(videoContainer);
-        ScrollScrubVideoComponent.observedElements.add(this);
+        observer.observe(videoContainer);
+        observedElements.add(this);
 
         // Update the positions of all scrub-videos
         ScrollScrubVideoComponent.updateScrubVideos();
@@ -93,14 +91,10 @@ class ScrollScrubVideoComponent extends HTMLElement {
   }
 
   static maybeDoStaticInitialisation() {
-    if (!ScrollScrubVideoComponent.observer) {
-      ScrollScrubVideoComponent.observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
+    if (!observer) {
+      observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
       document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
       window.addEventListener("resize", ScrollScrubVideoComponent.updateScrubVideos);
-
-      ScrollScrubVideoComponent.scrubVideos = new Set();
-      ScrollScrubVideoComponent.observedElements = new Set();
-
     }
   }
 
@@ -109,19 +103,25 @@ class ScrollScrubVideoComponent extends HTMLElement {
       const isWithinViewport = entry.intersectionRatio === 1;
 
       const videoContainer = entry.target as VideoContainer;
+      const videoComponent = videoContainer.ScrollScrubVideoComponent;
+
+      if (!videoComponent) {
+        console.warn("No ScrollScrubVideoComponent found for videoContainer", videoContainer);
+        return;
+      }
 
       // Add class 'animating' to element if it is within the viewport
       entry.target.classList.add('animating');
       entry.target.classList.toggle('in-view', isWithinViewport);
 
       // Remove the animation class after we're done zooming in or out
-      const delay = videoContainer.ScrollScrubVideoComponent.zoomDuration * 1000;
+      const delay = videoComponent.zoomDuration * 1000;
       setTimeout(() => {
         entry.target.classList.remove('animating');
       }, delay);
 
       if (isWithinViewport) {
-        ScrollScrubVideoComponent.activeVideoComponent = videoContainer.ScrollScrubVideoComponent;
+        activeVideoComponent = videoComponent;
         ScrollScrubVideoComponent.handleScrollEvent();
       }
     });
@@ -129,7 +129,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
   static updateScrubVideos() {
     // Get new positions of scrub video components
-    ScrollScrubVideoComponent.scrubVideos.forEach((videoComponent) => {
+    scrubVideos.forEach((videoComponent) => {
       const clientRect = videoComponent.getBoundingClientRect();
       const { y, bottom } = clientRect;
       const videoComponentTopPosition = y + window.scrollY;
@@ -141,28 +141,33 @@ class ScrollScrubVideoComponent extends HTMLElement {
       } else if (videoComponent.isHidden && window.innerWidth >= videoComponent.minWidth) {
         videoComponent.style.display = 'block';
         videoComponent.isHidden = false;
-        if (!ScrollScrubVideoComponent.observedElements.has(videoComponent)) {
+        if (!observedElements.has(videoComponent)) {
           videoComponent.loadAndObserve();
         }
       }
 
-      videoComponent.componentData = {
+      componentDataMap.set(videoComponent, {
         lower: videoComponentTopPosition,
         upper: videoComponentBottomPosition,
         video: videoComponent.shadowRoot!.querySelector('video')
-      };
+      });
     });
 
   };
 
   static handleScrollEvent() {
-    if (ScrollScrubVideoComponent.activeVideoComponent) {
-      const activeWrapperPosition = ScrollScrubVideoComponent.activeVideoComponent.componentData;
+    if (activeVideoComponent) {
+      const activeWrapperPosition = componentDataMap.get(activeVideoComponent);
+
+      if (!activeWrapperPosition) {
+        return;
+      }
+
       const { lower, upper, video } = activeWrapperPosition;
 
       if (video) {
         // Calculate the scroll progress within the active video wrapper
-        const progress = Math.max(Math.min((window.scrollY - lower) / (upper - lower), ScrollScrubVideoComponent.OVERSCRUB_AVOIDANCE_FACTOR), 0);
+        const progress = Math.max(Math.min((window.scrollY - lower) / (upper - lower), OVERSCRUB_AVOIDANCE_FACTOR), 0);
         const seekTime = (progress * video.duration);
 
         // console.log(`${wrapperTopPosition} > ${window.scrollY} (${progress}) [${seekTime}] duration: ${video.duration} > ${wrapperBottomPosition}`);
@@ -210,6 +215,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
           <video src='${this.src}' muted  playsinline></video>
       </div>`;
   }
+
 }
 
 customElements.define("scroll-scrub-video", ScrollScrubVideoComponent);

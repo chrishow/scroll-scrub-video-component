@@ -1,6 +1,6 @@
 ## Scroll-to-Scrub video Web Component
 
-A web component which displays videos which scrub as you scroll the page. 
+A zero-dependencies web component which displays videos which scrub as you scroll the page. 
 
 
 ### Demo:
