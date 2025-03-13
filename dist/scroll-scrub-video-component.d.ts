@@ -15,7 +15,7 @@ declare class ScrollScrubVideoComponent extends HTMLElement {
     attributeChangedCallback(_: string, oldValue: string | null, newValue: string | null): void;
     get minWidth(): number;
     static get observedAttributes(): string[];
-    static maybeDoStaticInitialisation(): void;
+    static doStaticInitialisation(): void;
     static intersectionObserverCallback(entries: IntersectionObserverEntry[], _: IntersectionObserver): void;
     static updateAllScrollScrubComponents(): void;
     static handleScrollEvent(): void;

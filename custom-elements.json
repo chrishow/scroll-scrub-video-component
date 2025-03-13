@@ -68,7 +68,7 @@
             },
             {
               "kind": "method",
-              "name": "maybeDoStaticInitialisation",
+              "name": "doStaticInitialisation",
               "static": true
             },
             {

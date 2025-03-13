@@ -35,7 +35,10 @@ class ScrollScrubVideoComponent extends HTMLElement {
 
   constructor() {
     super();
-    ScrollScrubVideoComponent.maybeDoStaticInitialisation();
+
+    if (!staticInitialisationDone) {
+      ScrollScrubVideoComponent.doStaticInitialisation();
+    }
 
     // Initialise instance members
     this.isHidden = false;
@@ -114,14 +117,12 @@ class ScrollScrubVideoComponent extends HTMLElement {
   }
 
 
-  static maybeDoStaticInitialisation() {
-    if (!staticInitialisationDone) {
-      observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
-      document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
-      window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
+  static doStaticInitialisation() {
+    observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
+    document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
+    window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
 
-      staticInitialisationDone = true;
-    }
+    staticInitialisationDone = true;
   }
 
   static intersectionObserverCallback(entries: IntersectionObserverEntry[], _: IntersectionObserver) {
