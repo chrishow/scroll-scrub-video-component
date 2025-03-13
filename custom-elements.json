@@ -4,6 +4,42 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/debounce.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "debounce",
+          "parameters": [
+            {
+              "name": "callback"
+            },
+            {
+              "name": "frequency",
+              "default": "250"
+            },
+            {
+              "name": "timer",
+              "default": "null",
+              "type": {
+                "text": "number | null"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "debounce",
+          "declaration": {
+            "name": "debounce",
+            "module": "src/debounce.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/scroll-scrub-video-component.ts",
       "declarations": [
         {

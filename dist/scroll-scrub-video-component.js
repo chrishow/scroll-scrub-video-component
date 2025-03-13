@@ -1,5 +1,6 @@
 "use strict";
 import { styles } from './styles';
+import { debounce } from './debounce';
 // Static class members
 const componentDataMap = new WeakMap();
 let observer;
@@ -78,7 +79,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
     static doStaticInitialisation() {
         observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
         document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
-        window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
+        window.addEventListener("resize", debounce(ScrollScrubVideoComponent.updateAllScrollScrubComponents, 50));
         staticInitialisationDone = true;
     }
     static intersectionObserverCallback(entries, _) {

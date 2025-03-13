@@ -1,6 +1,8 @@
 "use strict";
 
 import { styles } from './styles';
+import { debounce } from './debounce';
+
 
 interface VideoContainer extends HTMLElement {
   // A reference back to this VideoContainer's parent ScrollScrubVideoComponent 
@@ -120,7 +122,7 @@ class ScrollScrubVideoComponent extends HTMLElement {
   static doStaticInitialisation() {
     observer = new IntersectionObserver(ScrollScrubVideoComponent.intersectionObserverCallback, { threshold: 1 });
     document.addEventListener("scroll", ScrollScrubVideoComponent.handleScrollEvent);
-    window.addEventListener("resize", ScrollScrubVideoComponent.updateAllScrollScrubComponents);
+    window.addEventListener("resize", debounce(ScrollScrubVideoComponent.updateAllScrollScrubComponents, 50));
 
     staticInitialisationDone = true;
   }
