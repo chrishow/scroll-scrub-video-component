@@ -11,7 +11,7 @@ A zero-dependencies web component which displays videos which scrub as you scrol
 
 #### 1. Include the Web Component javascript.
 
-Download the file <a download href='./dist/scroll-scrub-video-component.bundle.js'>`scroll-scrub-video-component.bundle.js`</a> and include it in the document head:
+Download the file <a download href='https://raw.githubusercontent.com/chrishow/scroll-scrub-video-component/refs/heads/main/dist/scroll-scrub-video-component.bundle.js'>`scroll-scrub-video-component.bundle.js`</a> and include it in the document head:
 
 ```html
 <script src="scroll-scrub-video-component.bundle.js"></script>
