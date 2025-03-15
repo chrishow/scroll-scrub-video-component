@@ -33,7 +33,7 @@ import 'scroll-scrub-video-component';
 ```
 
 
-### 2. Add components to HTML
+#### 2. Add components to HTML
 Add HTML elements for each component, like this:
 
 ```html
@@ -68,7 +68,7 @@ To prevent a layout shift when the component initialises, you can add this to yo
 }
 ```
 
-### 4. Optional additional CSS variables
+#### 4. Optional additional CSS variables
 The following CSS variables/custom properties can be added to the CSS in step 3 if you want more control over the component. 
 
 The default settings are shown in these examples. 
@@ -169,9 +169,6 @@ Used to automatically rebuild the component as soon as any changes are made to t
 
 Serves the component locally.
 
-
-## 👷‍♀️ Other commands
-
 ```npm run build:bundle```
 
 Bundles the component into a single file (to _dist/scroll-scrub-video-component.bundle.js_).
@@ -179,5 +176,5 @@ Bundles the component into a single file (to _dist/scroll-scrub-video-component.
 
 ```npm run analyze```
 
-Builds a [custom elements manifest](https://github.com/webcomponents/custom-elements-manifest) (_custom-elements.json_) which can be used by assistive tools to benefit the custom element development experience.
+Builds a [custom elements manifest](https://github.com/webcomponents/custom-elements-manifest) (_custom-elements.json_) which can be used by IDEs for better auto-completion. 
 
