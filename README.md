@@ -115,12 +115,12 @@ I recommend using these settings for the Chrome/Edge/Safari version:
 
 ```sh
 ffmpeg -y \
+-vcodec libx264 \
 -i input.mov \
 -vf scale=1920:-1 \
 -crf 25 \
 -g 5 \
 -movflags faststart \
--vcodec libx264 \
 -pix_fmt yuv420p \
 -an \
 -preset 'slow' \
@@ -136,12 +136,12 @@ In this example:
 For Firefox, I would change this to:
 ```sh
 ffmpeg -y \
+-vcodec libx264 \
 -i input.mov \
 -vf scale=1920:-1 \
 -crf 25 \
 -g 1 \
 -movflags faststart \
--vcodec libx264 \
 -pix_fmt yuv420p \
 -an \
 -preset 'slow' \
